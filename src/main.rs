@@ -6,10 +6,15 @@ use config::args::CliArgs;
 use config::loader::load_config_from_home;
 use clap::Parser;
 use std::fs;
+use std::time::Instant;
+
+use treescanner::utils::ascii_spinner::start_spinner;
 
 fn main() {
     let args = CliArgs::parse();
     let file_config = load_config_from_home().unwrap_or_default();
+
+    let start_time = Instant::now();
 
     if !args.root_path.is_dir() {
         eprintln!("Fehler: '{}' ist kein gültiges Verzeichnis.", args.root_path.display());
@@ -41,7 +46,20 @@ fn main() {
     };
 
     let mut builder = TreeBuilder::new(config);
+
+    // Spinner starten, wenn nicht quiet
+    let spinner = if !args.quiet {
+        Some(start_spinner(2))
+    } else {
+        None
+    };
+
     let output = builder.build_tree();
+
+    if let Some(stop) = spinner {
+        let _ = stop.send(());
+    }
+    println!(); // saubere Zeile nach Spinner
 
     let viewonly = args.viewonly || file_config.viewonly.unwrap_or(false);
     let output_path = args.output.clone().or_else(|| file_config.output.map(Into::into)).unwrap_or_else(|| "tree.txt".into());
@@ -51,13 +69,16 @@ fn main() {
             eprintln!("Fehler beim Schreiben der Datei: {e}");
             std::process::exit(1);
         }
-        let (folders, files) = builder.stats();
-        println!(
-            "Erfasst wurden {} Ordner und {} Dateien. Ergebnis in {} gespeichert.",
-            folders,
-            files,
-            output_path.display()
-        );
+        if !args.quiet {
+            let (folders, files) = builder.stats();
+            println!(
+                "Erfasst wurden {} Ordner und {} Dateien. Ergebnis in {} gespeichert.",
+                folders,
+                files,
+                output_path.display()
+            );
+            println!("⏱️ Gesamtlaufzeit: {:.2?}", start_time.elapsed());
+        }
     } else {
         println!("{}", output);
     }

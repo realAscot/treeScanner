@@ -10,6 +10,14 @@ use std::path::PathBuf;
     about = "Generiert eine ASCII-Baumstruktur eines Verzeichnisses."
 )]
 pub struct CliArgs {
+    /// Aktiviere den Debug-Modus
+    #[clap(short = 'D', long = "debug", global = true, action)]
+    pub debug: bool,
+
+    /// Aktiviere den Silent-Mode für Verwendung in Batch und Skripten
+    #[clap(short = 'q', long, global = true, action)]
+    pub quiet: bool,
+
     /// Stammverzeichnis (default: aktuelles Verzeichnis)
     #[arg(default_value = ".")]
     pub root_path: PathBuf,
