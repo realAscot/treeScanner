@@ -23,6 +23,30 @@ Dieses Tool ist im Rahmen meines persönlichen Projekts von C nach Rust zu wechs
 
 ```
 
+**GEPLANTE STRUKTUR (DEV)**  
+
+```plaintext
+
+src/
+├── main.rs                → CLI-Einstieg
+├── app/
+│   ├── mod.rs
+│   └── treebuilder.rs     → Feature 1: Verzeichnisbaum
+├── config/
+│   ├── mod.rs
+│   └── args.rs            → Feature 2: Parameterübergabe
+├── output/
+│   └── writer.rs          → Datei schreiben
+├── formatting/
+│   └── aligner.rs         → Ausrichtung Kommentare
+├── i18n/
+│   └── messages.rs        → Sprachausgabe / Lokalisierung
+├── utils/
+│   ├── mod.rs
+│   └── logger.rs
+
+```
+
 ---
 
 ## Features

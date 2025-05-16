@@ -3,5 +3,15 @@ name = "treescanner"
 version = "0.1.0"
 edition = "2024"
 
+[package.metadata.winres]
+subsystem = "console"
+
 [build-dependencies]
 embed-resource = "2.4"
+
+[dependencies]
+clap = { version = "4.5", features = ["derive"] }
+serde = { version = "1.0", features = ["derive"] }
+toml = "0.8"
+dirs = "5"
+
