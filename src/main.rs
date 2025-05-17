@@ -23,13 +23,13 @@ fn main() {
     let timer = Instant::now();
 
     if !args.root_path.is_dir() {
-        eprintln!("Fehler: '{}' ist kein gültiges Verzeichnis.", args.root_path.display());
+        eprintln!("⚠️  Fehler: '{}' ist kein gültiges Verzeichnis.", args.root_path.display());
         std::process::exit(1);
     }
 
     if let Some(parent) = args.output.as_ref().and_then(|p| p.parent()) {
         if let Err(e) = fs::create_dir_all(parent) {
-            eprintln!("Fehler beim Erstellen des Zielordners: {e}");
+            eprintln!("⚠️  Fehler beim Erstellen des Zielordners: {e}");
             std::process::exit(1);
         }
     }
@@ -42,10 +42,11 @@ fn main() {
         } else {
             file_config.max_files_per_dir.unwrap_or(100)
         },
-        ignored_dirs: if !args.ignore.is_empty() {
-            args.ignore
-        } else {
-            file_config.ignore.unwrap_or_default().into_iter().collect()
+        // Ignorierte Verzeichnisse: CLI hat Vorrang, dann Config, sonst leer
+        ignored_dirs: match (!args.ignore.is_empty(), file_config.ignore) {
+            (true, _) => args.ignore,
+            (false, Some(set)) => set.into_iter().collect(),
+            (false, None) => vec![],
         },
         folder_icon: "📁".to_string(),
         file_icon: "📄".to_string(),

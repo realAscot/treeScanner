@@ -12,5 +12,9 @@ target/**
 # Build - Test:
 *.txt
 
+# Develop
+TODO.md
+
 # Releases (realAscot)
 releases/**
+bin/**

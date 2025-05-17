@@ -1,7 +1,0 @@
-max_depth = 3
-max_files_per_dir = 50
-ignore = .git,__pycache__,target
-language = de
-align_comments = true
-output = tree.txt
-viewonly = false

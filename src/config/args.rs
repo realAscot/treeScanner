@@ -4,7 +4,7 @@ use std::path::PathBuf;
 /// CLI-Argumente für TreeScanner
 #[derive(Parser, Debug)]
 #[command(  author ="Adam Skotarczak <adam@skotarczak.net>",
-            version= "1.0.0",
+            version= "0.2.0",
             about = "TreeScanner: Verzeichnisse als ASCII-Baum visualisieren.",
 
 long_about = r#"
@@ -29,7 +29,7 @@ pub struct CliArgs {
     #[arg(long)]
     pub max_depth: Option<usize>,
 
-    /// Maximale Dateianzahl pro Verzeichnis (Standard: 100)
+    /// Maximale Dateianzahl pro Verzeichnis
     #[arg(long, default_value_t = 100)]
     pub max_files_per_dir: usize,
 
@@ -38,7 +38,7 @@ pub struct CliArgs {
     pub ignore: Vec<String>,
 
     /// Ausgabeziel (Standard: tree.txt)
-    #[arg(short, long)]
+    #[arg(short = 'o', long)]
     pub output: Option<PathBuf>,
 
     /// Nur in Konsole anzeigen, keine Ausgabedatei speichern
@@ -54,6 +54,6 @@ pub struct CliArgs {
     pub quiet: bool,
 
     /// Kommentare ausrichten (DEV: optisch instabil)
-    #[arg(long, default_value_t = false)]
+    #[arg(short = 'c', long, default_value_t = false)]
     pub align_comments: bool,
 } 
