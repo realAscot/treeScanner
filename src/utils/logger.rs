@@ -1,2 +1,2 @@
-pub fn init() {
+pub fn init_logger() {
 }
