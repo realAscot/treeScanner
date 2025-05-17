@@ -2,7 +2,11 @@
 
 ![TreeScanner-Logo](./media/logo-treescanner_512x512.png)  
 
-Dieses Tool ist im Rahmen meines persönlichen Projekts von C nach Rust zu wechseln.  
+TreeScanner ist ein leichtgewichtiges CLI-Tool zur Darstellung von Verzeichnisstrukturen als ASCII-Baum. Dieses Tool entstand im Rahmen meines persönlichen Projekts, systemnahe Werkzeuge von C nach Rust zu migrieren.  
+
+Der original treeScanner in Python ist unter <https://github.com/realAscot/treeScannerASCII> zu finden. Dieser ist auch als Python-Modul zu verwenden.
+
+---
 
 ## Inhalt
 
@@ -10,49 +14,79 @@ Dieses Tool ist im Rahmen meines persönlichen Projekts von C nach Rust zu wechs
   - [Inhalt](#inhalt)
   - [Struktur](#struktur)
   - [Features](#features)
+  - [Verwendung](#verwendung)
+  - [Beispielausgabe](#beispielausgabe)
   - [Lizenz](#lizenz)
 
 ---
 
 ## Struktur
 
-**Diese Struktur ist eine Ausgabe des Tools:**
-
-```plaintext
-
-
-```
-
 **GEPLANTE STRUKTUR (DEV)**  
 
 ```plaintext
-
 src/
 ├── main.rs                → CLI-Einstieg
 ├── app/
 │   ├── mod.rs
-│   └── treebuilder.rs     → Feature 1: Verzeichnisbaum
+│   └── treebuilder.rs     → Verzeichnisbaum erstellen
 ├── config/
-│   ├── mod.rs
-│   └── args.rs            → Feature 2: Parameterübergabe
-├── output/
-│   └── writer.rs          → Datei schreiben
-├── formatting/
-│   └── aligner.rs         → Ausrichtung Kommentare
-├── i18n/
-│   └── messages.rs        → Sprachausgabe / Lokalisierung
+│   └── args.rs            → Parameterübergabe & Konfig
 ├── utils/
-│   ├── mod.rs
+│   ├── ascii_spinner.rs   → Fortschrittsanzeige
 │   └── logger.rs
-
+├── tests/                 → Integrationstests
+├── media/                 → Logos / Assets
+├── resources/             → .conf-Template, Icons, Versioninfo
 ```
 
 ---
 
 ## Features
 
+- 📁 ASCII-Baumstruktur mit Icons (📁, 📄)
+- 📂 Max. Tiefe & Datei-Anzahl konfigurierbar (`--max-depth`, `--max-files-per-dir`)
+- 🚫 Ignorieren von Verzeichnissen (`--ignore .git,target`)
+- 💬 Optional ausrichtbare Kommentarspalte (`--align-comments`)
+- ⚙ Konfigurierbar per CLI oder `~/.treescanner.conf`
+- 🌀 Fortschrittsanzeige während des Scans
+- 🛠 `--quiet`, `--debug`, `--viewonly`, `--output` u. a.
+- 🧪 Tests, strukturierter Build, Markdown-fähige Ausgabe
+
+---
+
+## Verwendung
+
+```bash
+# Einfacher Scan (aktuelles Verzeichnis)
+./treescanner.exe
+
+# Mit Tiefe 3, ohne speichern
+./treescanner.exe --max-depth 3 --viewonly
+
+# Mit Kommentar-Ausrichtung
+./treescanner.exe --align-comments
+
+# Ergebnis in Datei mit anderem Pfad speichern
+./treescanner.exe --output ./struktur/tree.md
+```
+
+---
+
+## Beispielausgabe
+
+```plaintext
+📁 ./src/
+├── 📄 main.rs               #
+├── 📁 app/                  #
+│   └── 📄 treebuilder.rs    #
+└── 📁 utils/                #
+    ├── 📄 ascii_spinner.rs  #
+    └── 📄 logger.rs         #
+```
+
 ---
 
 ## Lizenz
 
----
+MIT © [Adam Skotarczak](mailto:adam@skotarczak.net) siehe [LICENSE](./LICENSE)  

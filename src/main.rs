@@ -1,20 +1,26 @@
 mod config;
 mod app;
+mod utils;
 
 use app::treebuilder::{TreeBuilder, TreeBuilderConfig};
 use config::args::CliArgs;
 use config::loader::load_config_from_home;
+use utils::ascii_spinner::start_spinner;
 use clap::Parser;
 use std::fs;
 use std::time::Instant;
+use utils::logger::init_logger;
 
-use treescanner::utils::ascii_spinner::start_spinner;
+/// Gibt die verstrichene Zeit seit `timer` aus.
+fn view_timer(timer: &Instant) {
+    println!("\n⏱️ Gesamtlaufzeit des Scans: {:.2?}", timer.elapsed());
+}
 
 fn main() {
+    init_logger();
     let args = CliArgs::parse();
     let file_config = load_config_from_home().unwrap_or_default();
-
-    let start_time = Instant::now();
+    let timer = Instant::now();
 
     if !args.root_path.is_dir() {
         eprintln!("Fehler: '{}' ist kein gültiges Verzeichnis.", args.root_path.display());
@@ -43,23 +49,31 @@ fn main() {
         },
         folder_icon: "📁".to_string(),
         file_icon: "📄".to_string(),
+        align_comments: args.align_comments,
     };
 
     let mut builder = TreeBuilder::new(config);
 
-    // Spinner starten, wenn nicht quiet
-    let spinner = if !args.quiet {
-        Some(start_spinner(2))
+    let (stop_spinner, spinner_handle) = if !args.quiet {
+        let (s, h) = start_spinner(8);
+        (Some(s), Some(h))
     } else {
-        None
+        (None, None)
     };
 
-    let output = builder.build_tree();
+    let mut output = builder.build_tree().join("\n");
 
-    if let Some(stop) = spinner {
+    if builder.config.align_comments {
+        let lines = output.lines().map(String::from).collect::<Vec<_>>();
+        output = builder.align_lines_with_comments(&lines).join("\n");
+    }
+
+    if let Some(stop) = stop_spinner {
         let _ = stop.send(());
     }
-    println!(); // saubere Zeile nach Spinner
+    if let Some(handle) = spinner_handle {
+        let _ = handle.join();
+    }
 
     let viewonly = args.viewonly || file_config.viewonly.unwrap_or(false);
     let output_path = args.output.clone().or_else(|| file_config.output.map(Into::into)).unwrap_or_else(|| "tree.txt".into());
@@ -77,9 +91,10 @@ fn main() {
                 files,
                 output_path.display()
             );
-            println!("⏱️ Gesamtlaufzeit: {:.2?}", start_time.elapsed());
+            view_timer(&timer);
         }
     } else {
         println!("{}", output);
+        view_timer(&timer);
     }
-} 
+}

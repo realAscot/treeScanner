@@ -9,11 +9,12 @@ pub struct TreeBuilderConfig {
     pub ignored_dirs: Vec<String>,
     pub folder_icon: String,
     pub file_icon: String,
+    pub align_comments: bool,
 }
 
 /// Verantwortlich für das Erzeugen der ASCII-Baumstruktur.
 pub struct TreeBuilder {
-    config: TreeBuilderConfig,
+    pub config: TreeBuilderConfig,
     folder_count: usize,
     file_count: usize,
 }
@@ -28,10 +29,11 @@ impl TreeBuilder {
     }
 
     /// Startet den Scan und liefert das Ergebnis als String.
-    pub fn build_tree(&mut self) -> String {
-        let mut lines = vec![format!("{} {}/", self.config.folder_icon, self.config.root_path.display())];
-        self.scan_dir(&self.config.root_path.clone(), 0, "", &mut lines);
-        lines.join("\n")
+    pub fn build_tree(&mut self) -> Vec<String> {
+        let root = self.config.root_path.clone();
+        let mut lines = vec![format!("{} {}/", self.config.folder_icon, root.display())];
+        self.scan_dir(&root, 0, "", &mut lines);
+        lines
     }
 
     fn scan_dir(&mut self, path: &Path, depth: usize, prefix: &str, lines: &mut Vec<String>) {
@@ -94,5 +96,17 @@ impl TreeBuilder {
     /// Gibt die Anzahl gescannter Ordner und Dateien zurück.
     pub fn stats(&self) -> (usize, usize) {
         (self.folder_count, self.file_count)
+    }
+
+    /// Richtet die Ausgabezeilen mit Kommentarspalte aus.
+    pub fn align_lines_with_comments(&self, lines: &[String]) -> Vec<String> {
+        let max_len = lines.iter().map(|l| l.len()).max().unwrap_or(0);
+        lines
+            .iter()
+            .map(|line| {
+                let padding = " ".repeat(max_len - line.len() + 2);
+                format!("{}{}#", line, padding)
+            })
+            .collect()
     }
 }
