@@ -183,6 +183,11 @@ align_comments = false
 
 ## Build
 
+Du benötigst zum selbst kompilieren eine funktionierende Toolchain.
+Das Makefile steht Dir als anhalt zur Verfügung.
+
+1. npm installieren ->  
+
 ---
 
 ## Lizenz
