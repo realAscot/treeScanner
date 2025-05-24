@@ -54,16 +54,25 @@ impl TreeBuilder {
         let mut folders = vec![];
         let mut files = vec![];
 
+
         for entry in entries {
+            let path = entry.path();
             let file_name = entry.file_name().into_string().unwrap_or_default();
-            if entry.path().is_dir() {
-                if !self.config.ignored_dirs.contains(&file_name) {
-                    folders.push((file_name, entry.path()));
+
+            if path.is_dir() {
+
+                if let Some(dir_name) = path.file_name().and_then(|s| s.to_str()) {
+                    if self.config.ignored_dirs.iter().any(|ex| ex == dir_name) {
+                        continue;
+                    }
                 }
+
+                folders.push((file_name, path));
             } else {
                 files.push(file_name);
             }
         }
+
 
         for (idx, (name, path)) in folders.iter().enumerate() {
             self.folder_count += 1;

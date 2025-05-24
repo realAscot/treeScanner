@@ -16,6 +16,15 @@ fn view_timer(timer: &Instant) {
     println!("\n⏱️ Gesamtlaufzeit des Scans: {:.2?}", timer.elapsed());
 }
 
+// Hilfsfunktion zur Pfad-Normalisierung
+fn normalize_ignore_entry(s: &str) -> String {
+    s.trim_start_matches("./")
+     .trim_start_matches(".\\")
+     .trim_end_matches('/')
+     .trim_end_matches('\\')
+     .to_string()
+}
+
 fn main() {
     init_logger();
     let args = CliArgs::parse();
@@ -34,6 +43,12 @@ fn main() {
         }
     }
 
+    let ignored_dirs: Vec<String> = match (!args.ignore.is_empty(), file_config.ignore) {
+        (true, _) => args.ignore.iter().map(|s| normalize_ignore_entry(s)).collect(),
+        (false, Some(set)) => set.into_iter().map(|s| normalize_ignore_entry(&s)).collect(),
+        (false, None) => vec![],
+    };
+
     let config = TreeBuilderConfig {
         root_path: args.root_path.clone(),
         max_depth: args.max_depth.or(file_config.max_depth),
@@ -42,12 +57,7 @@ fn main() {
         } else {
             file_config.max_files_per_dir.unwrap_or(100)
         },
-        // Ignorierte Verzeichnisse: CLI hat Vorrang, dann Config, sonst leer
-        ignored_dirs: match (!args.ignore.is_empty(), file_config.ignore) {
-            (true, _) => args.ignore,
-            (false, Some(set)) => set.into_iter().collect(),
-            (false, None) => vec![],
-        },
+        ignored_dirs,
         folder_icon: "📁".to_string(),
         file_icon: "📄".to_string(),
         align_comments: args.align_comments,

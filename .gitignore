@@ -19,3 +19,17 @@ desktop.ini
 # Releases (realAscot)
 releases/**
 bin/**
+
+# Misc
+*zip
+*.tar.gz
+*.tar.xz
+*.tar.bz2
+*.tar.lz
+
+
+
+
+
+
+
