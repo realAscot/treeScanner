@@ -3,7 +3,7 @@
 #include <winver.h>
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 1,0,0,0
+ FILEVERSION 1,0,1,0
  PRODUCTVERSION 1,0,0,0
  FILEFLAGSMASK 0x3fL
  FILEFLAGS 0x0L
@@ -17,11 +17,11 @@ BEGIN
         BEGIN
             VALUE "CompanyName", "ionivation.com"
             VALUE "FileDescription", "CLI Verzeichnisscanner"
-            VALUE "FileVersion", "1.0.0.0"
+            VALUE "FileVersion", "1.0.1.0"
             VALUE "InternalName", "treescanner"
             VALUE "OriginalFilename", "treescanner.exe"
             VALUE "ProductName", "CLI Treescanner"
-            VALUE "ProductVersion", "1.0.0"
+            VALUE "ProductVersion", "1.0.1"
             VALUE "LegalCopyright", "(C) 2025 Adam Skotarczak"
         END
     END

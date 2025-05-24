@@ -1,5 +1,11 @@
 # Changelog treeScanner (Rust)
 
+- **2025-05-24 - v1.0.1**  
+  - **Bugfix:**  
+    - [x] Parameter werden nun richtig geparst, auch `-x ./fu/,./bla` statt bisher nur `-x fu,bla`  
+
+---
+
 - **2025-05-17 - v1.0.0**
   - **Geändert:**  
     - [x] Komplette Neuumsetzung des TreeScanner-Tools in Rust  

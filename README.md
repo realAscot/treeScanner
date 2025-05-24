@@ -28,8 +28,9 @@ Der original treeScanner in Python ist unter <https://github.com/realAscot/treeS
     - [🔍 Ort](#-ort)
     - [📘 Format](#-format)
     - [📝 Format (.toml)](#-format-toml)
+  - [Build](#build)
   - [Lizenz](#lizenz)
-    - [Eingesetzte Libraries (MIT-kompatibel):](#eingesetzte-libraries-mit-kompatibel)
+    - [Eingesetzte Libraries (MIT-kompatibel)](#eingesetzte-libraries-mit-kompatibel)
   - [💬 Kontakt](#-kontakt)
 
 ---
@@ -180,11 +181,15 @@ align_comments = false
 
 ---
 
+## Build
+
+---
+
 ## Lizenz
 
 Dieses Projekt steht unter der [MIT-Lizenz](./LICENSE).
 
-### Eingesetzte Libraries (MIT-kompatibel):
+### Eingesetzte Libraries (MIT-kompatibel)
 
 | Crate           | Lizenz     |
 |-----------------|------------|

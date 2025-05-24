@@ -42,7 +42,7 @@ pub struct CliArgs {
     pub output: Option<PathBuf>,
 
     /// Nur in Konsole anzeigen, keine Ausgabedatei speichern
-    #[arg(long)]
+    #[arg(short = 'i', long)]
     pub viewonly: bool,
 
     /// Debug-Modus aktivieren
